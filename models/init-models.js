@@ -1,3 +1,4 @@
+// ESTE ARCHIVO ARRANCA TODOS LOS MODELOS
 var DataTypes = require("sequelize").DataTypes;
 var _PaymentMethod = require("./payment-method");
 var _Tax = require("./tax");

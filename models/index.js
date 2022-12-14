@@ -1,4 +1,42 @@
+// ARRANCA LA LIBRERÍA SEQUELIZE Y HACE LA CONEXIÓN A LA BASE DE DATOS. Sequelize LLAMA A LA LIBRERÍA Y sequelize A LA BASE DE DATOS Y DESPUÉS init-models ARRANCA TODOS LOS MODELOS.
+// db SERÍA UN ARRAY DE OBJETOS
+
+'use strict';
+
+const dotenv = require('dotenv').config();
+const Sequelize = require('sequelize');
+const process = require('process');
+const initModels = require("./init-models"); 
+
+const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
+    
+    host: process.env.DATABASE_HOST,
+    dialect: "mysql",
+
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
+})
+
+const db = initModels(sequelize);
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+db.sequelize.sync().then(() => {
+    console.log("Sincronizado con la base de datos.");
+}).catch((err) => {
+    console.log("Fallo al sincronizar con la base de datos: " + err.message);
+});
+
+module.exports = db;
+
+
+
 // ESTE ES EL CÓDIGO QUE GENERA AUTOMÁTICAMENTE TRAS EL COMANDO> npx sequelize init
+
 // 'use strict';
 
 // const fs = require('fs');
