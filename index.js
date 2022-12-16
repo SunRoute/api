@@ -11,9 +11,9 @@ var corsOptions = {
 // DESDE DÓNDE SE VAN A RECIBIR LLAMADAS
 
 app.use(cors(corsOptions));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-// CÓMO SE VAN A RECIBIR LLAMADAS
+app.use(express.json({limit: "10mb", extended: true}))
+app.use(express.urlencoded({limit: "10mb", extended: true, parameterLimit: 50000}))
+// CÓMO SE VAN A RECIBIR LLAMADAS. LAS DOS ÚLTIMAS LÍNEAS AMPLIARÁN EL TAMAÑO DE ENVÍO DE LOS PEDIDOS.
 
 var routePath="./routes/";
 // fs(FILESYSTEM) ES UNA LIBRERÍA NATIVA PARA LEER CARPETAS Y ARCHIVOS.

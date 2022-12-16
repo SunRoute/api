@@ -1,12 +1,12 @@
 const db = require("../../models");
-const Tax = db.Tax;
+const PaymentMethod = db.PaymentMethod;
 const Op = db.Sequelize.Op;
 // db SERÍA UN ARRAY DE OBJETOS. Op ES UN OPERADOR PARA HACER LOS CONDICIONALES.
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.type) {
+    if (!req.body.name) {
          // DATOS OBLIGATORIOS. req.body SON TODOS LOS DATOS RECOGIDOS EN EL FORMULARIO.
         res.status(400).send({
             message: "Faltan campos por rellenar."
@@ -16,13 +16,13 @@ exports.create = (req, res) => {
         return;
     }
 
-    const tax = {
+    const paymentMethod = {
         // DATOS QUE SE QUIEREN INTRODUCIR EN LA BDD
-        type: req.body.type,
-        valid: req.body.valid ? req.body.valid : true
+        name: req.body.name,
+        visible: req.body.visible ? req.body.visible : true
     };
 
-    Tax.create(tax).then(data => {
+    PaymentMethod.create(paymentMethod).then(data => {
         // CREA UN NUEVO REGISTRO A PARTIR DE LOS DATOS (create) Y SI VA BIEN RECOGE LA RESPUESTA DE LA BASE DE DATOS (then)
         res.status(200).send(data);
     }).catch(err => {
@@ -38,13 +38,13 @@ exports.findAll = (req, res) => {
 
     let whereStatement = {};
 
-    if(req.query.valid)
+    if(req.query.visible)
         // SI VIENE UN PARÁMETRO valid, SE CREA EL OBJETO (whereStatement.valid). ESTO ES EQUIVALENTE A HACER LA CONSULTA A LA BDD.
-        whereStatement.valid = {[Op.substring]: req.query.valid};
+        whereStatement.visible = {[Op.substring]: req.query.visible};
         // EN ESTE CASO SE ESTÁ UTILIZANDO . OTRA OPCIÓN a substring ES USAR like, PERO EN ESE CASO SE CONCATENARÍA -> `%${req.query.valid}%`
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
     // SI whereStatement TIENE ALGO AÑADIRÍA LOS DATOS, HASTA LA LONGITUD, MEDIANTE and
-    Tax.findAll({ where: condition }).then(data => {
+    PaymentMethod.findAll({ where: condition }).then(data => {
         // MODIFICA UN REGISTRO A PARTIR DE LOS DATOS (findAll) Y SI VA BIEN RECOGE LA RESPUESTA DE LA BASE DE DATOS (then)
         res.status(200).send(data);
     }).catch(err => {
@@ -59,7 +59,7 @@ exports.findOne = (req, res) => {
 
     const id = req.params.id;
     // SE RECOGE EL PARARÁMETRO QUE PASA EL USUARIO
-    Tax.findByPk(id).then(data => {
+    PaymentMethod.findByPk(id).then(data => {
     // findByPk -> ENCONTRAR POR CLAVE PRIMARIA (PRIMARY KEY)
         if (data) {
             // SI DEVUELVE UN REGISTRO
@@ -84,7 +84,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Tax.update(req.body, {
+    PaymentMethod.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -110,7 +110,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Tax.destroy({
+    PaymentMethod.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {
