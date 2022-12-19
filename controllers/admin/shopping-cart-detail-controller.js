@@ -1,11 +1,11 @@
 const db = require("../../models");
-const Product = db.Product;
+const ShoppingCartDetail = db.ShoppingCartDetail;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.name || !req.body.price || !req.body.categoryId || !req.body.taxId) {
+    if (!req.body.shoppingCartId || !req.body.productId || !req.body.quantity || !req.body.price || !req.body.measuringUnit || !req.body.productName || !req.body.taxType) {
         res.status(400).send({
             message: "Faltan campos por rellenar."
         });
@@ -13,16 +13,17 @@ exports.create = (req, res) => {
         return;
     }
 
-    const product = {
-        name: req.body.name,
+    const shoppingCartDetail = {
+        shoppingCartId: req.body.shoppingCartId,
+        productId: req.body.productId,
+        quantity: req.body.quantity,
         price: req.body.price,
-        categoryId: req.body.categoryId,
-        taxId: req.body.taxId,
-        featured: req.body.featured ? req.body.featured : false,
-        visible: req.body.visible ? req.body.visible : true
+        measuringUnit: req.body.measuringUnit,
+        productName: req.body.productName,
+        taxType: req.body.taxType,
     };
 
-    Product.create(product).then(data => {
+    ShoppingCartDetail.create(shoppingCartDetail).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -35,16 +36,12 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 
     let whereStatement = {};
-
-    if(req.query.featured)
-        whereStatement.featured = {[Op.substring]: req.query.featured};
-    if(req.query.visible)
-        whereStatement.visible = {[Op.substring]: req.query.visible};
-    if(req.query.categoryId)
-        whereStatement.categoryId = {[Op.substring]: req.query.categoryId};
+    
+    if(req.query.taxType)
+        whereStatement.taxType = {[Op.substring]: req.query.taxType};
 
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Product.findAll({ where: condition }).then(data => {
+    ShoppingCartDetail.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -56,7 +53,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Product.findByPk(id).then(data => {
+    ShoppingCartDetail.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -77,7 +74,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Product.update(req.body, {
+    ShoppingCartDetail.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -101,7 +98,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Product.destroy({
+    ShoppingCartDetail.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {

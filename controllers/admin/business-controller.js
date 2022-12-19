@@ -1,11 +1,11 @@
 const db = require("../../models");
-const Product = db.Product;
+const Business = db.Business;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.name || !req.body.price || !req.body.categoryId || !req.body.taxId) {
+    if (!req.body.tradingName  || !req.body.cif  || !req.body.adress || !req.body.city || !req.body.postalCode || !req.body.phone || !req.body.email || !req.body.timetable || !req.body.openingDays) {
         res.status(400).send({
             message: "Faltan campos por rellenar."
         });
@@ -13,16 +13,20 @@ exports.create = (req, res) => {
         return;
     }
 
-    const product = {
-        name: req.body.name,
-        price: req.body.price,
-        categoryId: req.body.categoryId,
-        taxId: req.body.taxId,
-        featured: req.body.featured ? req.body.featured : false,
-        visible: req.body.visible ? req.body.visible : true
+    const business = {
+        tradingName: req.body.tradingName,
+        cif: req.body.cif,
+        adress: req.body.adress,
+        city: req.body.city,
+        postalCode: req.body.postalCode,
+        phone: req.body.phone,
+        email: req.body.email,
+        timetable: req.body.timetable,
+        openingDays: req.body.openingDays
+        
     };
 
-    Product.create(product).then(data => {
+    Business.create(business).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -36,15 +40,11 @@ exports.findAll = (req, res) => {
 
     let whereStatement = {};
 
-    if(req.query.featured)
-        whereStatement.featured = {[Op.substring]: req.query.featured};
-    if(req.query.visible)
-        whereStatement.visible = {[Op.substring]: req.query.visible};
-    if(req.query.categoryId)
-        whereStatement.categoryId = {[Op.substring]: req.query.categoryId};
+    if(req.query.postalCode)
+        whereStatement.postalCode = {[Op.substring]: req.query.postalCode};
 
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Product.findAll({ where: condition }).then(data => {
+    Business.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -56,7 +56,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Product.findByPk(id).then(data => {
+    Business.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -77,7 +77,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Product.update(req.body, {
+    Business.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -101,7 +101,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Product.destroy({
+    Business.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {

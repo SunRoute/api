@@ -1,21 +1,17 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Customer', {
+    return sequelize.define('Business', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        name: {
+        tradingName: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        surname: {
-            type: DataTypes.STRING(255),
-            allowNull: false
-        },
-        phone: {
+        cif: {
             type: DataTypes.STRING(10),
             allowNull: false
         },
@@ -30,10 +26,26 @@ module.exports = function(sequelize, DataTypes) {
         postalCode: {
             type: DataTypes.STRING(6),
             allowNull: false
+        },
+        phone: {
+            type: DataTypes.STRING(10),
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        timetable: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        openingDays: {
+            type: DataTypes.STRING(255),
+            allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'customers',
+        tableName: 'businesses',
         timestamps: true,
         paranoid: true,
         indexes: [

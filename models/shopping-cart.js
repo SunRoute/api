@@ -1,47 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Product', {
+    return sequelize.define('ShoppingCart', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        categoryId: {
+        customerId: {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'product_categories',
+                model: 'customers',
                 key: 'id'
             }
         },
-        taxId: {
+        fingerprintId: {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'taxes',
+                model: 'fingerprints',
                 key: 'id'
             }
         },
-        name: {
-            type: DataTypes.STRING(255),
-            allowNull: false
-        },
-        price: {
-            type: DataTypes.DECIMAL(6,2),
-            allowNull: false
-        },
-        featured: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false
-        },
-        visible: {
+        status: {
             type: DataTypes.BOOLEAN,
             allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'products',
+        tableName: 'shopping_carts',
         timestamps: true,
         paranoid: true,
         indexes: [
@@ -54,17 +42,17 @@ module.exports = function(sequelize, DataTypes) {
                 ]
             },
             {
-                name: "categoryId",
+                name: "customerId",
                 using: "BTREE",
                 fields: [
-                    { name: "categoryId" },
+                    { name: "customerId" },
                 ]
             },
             {
-                name: "taxId",
+                name: "fingerprintId",
                 using: "BTREE",
                 fields: [
-                    { name: "taxId" },
+                    { name: "fingerprintId" },
                 ]
             },
         ]

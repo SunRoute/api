@@ -1,11 +1,11 @@
 const db = require("../../models");
-const Product = db.Product;
+const Fingerprint = db.Fingerprint;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.name || !req.body.price || !req.body.categoryId || !req.body.taxId) {
+    if (!req.body.fingerprint) {
         res.status(400).send({
             message: "Faltan campos por rellenar."
         });
@@ -13,16 +13,12 @@ exports.create = (req, res) => {
         return;
     }
 
-    const product = {
-        name: req.body.name,
-        price: req.body.price,
-        categoryId: req.body.categoryId,
-        taxId: req.body.taxId,
-        featured: req.body.featured ? req.body.featured : false,
-        visible: req.body.visible ? req.body.visible : true
+    const fingerprint = {
+        fingerprint: req.body.fingerprint,
+        customerId: req.body.customerId,
     };
 
-    Product.create(product).then(data => {
+    Fingerprint.create(fingerprint).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -36,15 +32,9 @@ exports.findAll = (req, res) => {
 
     let whereStatement = {};
 
-    if(req.query.featured)
-        whereStatement.featured = {[Op.substring]: req.query.featured};
-    if(req.query.visible)
-        whereStatement.visible = {[Op.substring]: req.query.visible};
-    if(req.query.categoryId)
-        whereStatement.categoryId = {[Op.substring]: req.query.categoryId};
 
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Product.findAll({ where: condition }).then(data => {
+    Fingerprint.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -56,7 +46,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Product.findByPk(id).then(data => {
+    Fingerprint.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -77,7 +67,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Product.update(req.body, {
+    Fingerprint.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -101,7 +91,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Product.destroy({
+    Fingerprint.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {

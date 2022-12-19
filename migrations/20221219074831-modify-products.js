@@ -4,40 +4,48 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
    
-    await queryInterface.createTable('customers', {
+    await queryInterface.createTable('products', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      categoryId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: { 
+          model: 'product_categories', 
+          key: 'id' 
+          }, 
+          onUpdate: 'CASCADE', 
+          onDelete: 'SET NULL'
+      },
+      taxId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: { 
+          model: 'taxes', 
+          key: 'id' 
+          }, 
+          onUpdate: 'CASCADE', 
+          onDelete: 'SET NULL'
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      surname: {
+      price: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.DECIMAL(6, 2).UNSIGNED
       },
-      phone: {
+      featured: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.BOOLEAN
       },
-      email: {
+      visible: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      direccion: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      ciudad: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      codigoPostal: {
-        allowNull: false,
-        type: Sequelize.STRING(6)
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -56,7 +64,6 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
    
-    await queryInterface.dropTable('customers');
+    await queryInterface.dropTable('products');
   }
 };
-

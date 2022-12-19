@@ -1,47 +1,51 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Product', {
+    return sequelize.define('ShoppingCartDetail', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        categoryId: {
+        shoppingCartId: {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'product_categories',
+                model: 'shopping_carts',
                 key: 'id'
             }
         },
-        taxId: {
+        productId: {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'taxes',
+                model: 'products',
                 key: 'id'
             }
         },
-        name: {
-            type: DataTypes.STRING(255),
+        quantity: {
+            type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false
         },
         price: {
             type: DataTypes.DECIMAL(6,2),
             allowNull: false
         },
-        featured: {
-            type: DataTypes.BOOLEAN,
+        measuringUnit: {
+            type: DataTypes.STRING(255),
             allowNull: false
         },
-        visible: {
-            type: DataTypes.BOOLEAN,
+        productName: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        taxType: {
+            type: DataTypes.STRING(255),
             allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'products',
+        tableName: 'shopping_cart_details',
         timestamps: true,
         paranoid: true,
         indexes: [
@@ -54,17 +58,17 @@ module.exports = function(sequelize, DataTypes) {
                 ]
             },
             {
-                name: "categoryId",
+                name: "shoppingCartId",
                 using: "BTREE",
                 fields: [
-                    { name: "categoryId" },
+                    { name: "shoppingCartId" },
                 ]
             },
             {
-                name: "taxId",
+                name: "productId",
                 using: "BTREE",
                 fields: [
-                    { name: "taxId" },
+                    { name: "productId" },
                 ]
             },
         ]

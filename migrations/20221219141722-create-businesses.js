@@ -4,20 +4,32 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
    
-    await queryInterface.createTable('customers', {
+    await queryInterface.createTable('businesses', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      tradingName: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      surname: {
+      cif: {
+        allowNull: false,
+        type: Sequelize.STRING(10)
+      },
+      adress: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      city: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      postalCode: {
+        allowNull: false,
+        type: Sequelize.STRING(6)
       },
       phone: {
         allowNull: false,
@@ -27,17 +39,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      direccion: {
+      timetable: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      ciudad: {
+      openingDays: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      codigoPostal: {
-        allowNull: false,
-        type: Sequelize.STRING(6)
       },
       createdAt: {
         allowNull: false,
@@ -56,6 +64,6 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
    
-    await queryInterface.dropTable('customers');
+    await queryInterface.dropTable('businesses');
   }
 };

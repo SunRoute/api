@@ -1,11 +1,19 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Customer', {
+    return sequelize.define('Contact', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
+        },
+        fingerprintId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+                model: 'fingerprints',
+                key: 'id'
+            }
         },
         name: {
             type: DataTypes.STRING(255),
@@ -19,21 +27,17 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING(10),
             allowNull: false
         },
-        adress: {
+        email: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        city: {
-            type: DataTypes.STRING(255),
-            allowNull: false
-        },
-        postalCode: {
-            type: DataTypes.STRING(6),
+        message: {
+            type: DataTypes.TEXT,
             allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'customers',
+        tableName: 'contacts',
         timestamps: true,
         paranoid: true,
         indexes: [
@@ -43,6 +47,13 @@ module.exports = function(sequelize, DataTypes) {
                 using: "BTREE",
                 fields: [
                     { name: "id" },
+                ]
+            },
+            {
+                name: "fingerprintId",
+                using: "BTREE",
+                fields: [
+                    { name: "fingerprintId" },
                 ]
             },
         ]
