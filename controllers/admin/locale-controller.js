@@ -1,25 +1,29 @@
 const db = require("../../models");
-const Language = db.Language;
+const Locale = db.Locale;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.name || !req.body.alias) {
+    if (!req.body.languageAlias || !req.body.entity || !req.body.entityKey || !req.body.key || !req.body.value) {
         res.status(400).send({
             message: "Faltan campos por rellenar."
         });
 
         return;
     }
-    
-    const language = {
-        name: req.body.name,
-        alias: req.body.alias,
-        visible: req.body.visible ? req.body.visible : true
+
+    const locale = {
+        languageAlias: req.body.languageAlias,
+        entity: req.body.entity,
+        entityKey: req.body.entityKey,
+        key: req.body.key,
+        value: req.body.value
+
+        
     };
 
-    Language.create(language).then(data => {
+    Locale.create(locale).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -33,10 +37,11 @@ exports.findAll = (req, res) => {
 
     let whereStatement = {};
 
-    if(req.query.visible)
-        whereStatement.visible = {[Op.substring]: req.query.visible};
+    if(req.query.languageAlias)
+        whereStatement.languageAlias = {[Op.substring]: req.query.languageAlias};
+
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Language.findAll({ where: condition }).then(data => {
+    Locale.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -48,7 +53,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Language.findByPk(id).then(data => {
+    Locale.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -69,7 +74,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Language.update(req.body, {
+    Locale.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -93,7 +98,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Language.destroy({
+    Locale.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {

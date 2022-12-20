@@ -1,25 +1,29 @@
 const db = require("../../models");
-const Language = db.Language;
+const Sale = db.Sale;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.name || !req.body.alias) {
+    if (!req.body.paymentMethodId || !req.body.reference || !req.body.totalPrice || !req.body.basePrice || !req.body.totalTaxPrice) {
         res.status(400).send({
             message: "Faltan campos por rellenar."
         });
 
         return;
     }
-    
-    const language = {
-        name: req.body.name,
-        alias: req.body.alias,
-        visible: req.body.visible ? req.body.visible : true
+
+    const sale = {
+        shoppingCartId: req.body.shoppingCartId,
+        customerId: req.body.customerId,
+        paymentMethodId: req.body.paymentMethodId,
+        reference: req.body.reference,
+        totalPrice: req.body.totalPrice,
+        basePrice: req.body.basePrice,
+        totalTaxPrice: req.body.totalTaxPrice,
     };
 
-    Language.create(language).then(data => {
+    Sale.create(sale).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -32,11 +36,12 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 
     let whereStatement = {};
+    
+    if(req.query.paymentMethodId)
+        whereStatement.paymentMethodId = {[Op.substring]: req.query.paymentMethodId};
 
-    if(req.query.visible)
-        whereStatement.visible = {[Op.substring]: req.query.visible};
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Language.findAll({ where: condition }).then(data => {
+    Sale.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -48,7 +53,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Language.findByPk(id).then(data => {
+    Sale.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -69,7 +74,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Language.update(req.body, {
+    Sale.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -93,7 +98,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Language.destroy({
+    Sale.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {
