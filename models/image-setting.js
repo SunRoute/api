@@ -1,43 +1,55 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Customer', {
+    return sequelize.define('ImageSetting', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        name: {
+        entity: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        surname: {
+        directory: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        phone: {
-            type: DataTypes.STRING(10),
-            allowNull: false
-        },
-        email: {
+        type: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        adress: {
+        content: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        grid: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        city: {
+        acceptedContent: {
             type: DataTypes.STRING(255),
             allowNull: false
         },
-        postalCode: {
-            type: DataTypes.STRING(6),
+        extensionConversion: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        widthPx: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false
+        },
+        heightPx: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false
+        },
+        quality: {
+            type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'customers',
+        tableName: 'image_settings',
         timestamps: true,
         paranoid: true,
         indexes: [
