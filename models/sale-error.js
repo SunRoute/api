@@ -32,12 +32,28 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         errorCode: {
-            type: DataTypes.DECIMAL(5,0),
-            allowNull: false
+            type: DataTypes.INTEGER(5).UNSIGNED,
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo errorCode no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo errorCode obligatorio"
+                }
+            }
         },
         errorMessage: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo errorMessage no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo errorMessage obligatorio"
+                }
+            }
         }
     }, {
         sequelize,

@@ -5,25 +5,7 @@ const Op = db.Sequelize.Op;
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.saleId || !req.body.productId || !req.body.quantity || !req.body.price || !req.body.measuringUnit || !req.body.productName || !req.body.taxType) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
-
-        return;
-    }
-
-    const saleDetail = {
-        saleId: req.body.saleId,
-        productId: req.body.productId,
-        quantity: req.body.quantity,
-        price: req.body.price,
-        measuringUnit: req.body.measuringUnit,
-        productName: req.body.productName,
-        taxType: req.body.taxType,
-    };
-
-    SaleDetail.create(saleDetail).then(data => {
+    SaleDetail.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

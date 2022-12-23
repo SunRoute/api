@@ -4,25 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.name || !req.body.price || !req.body.categoryId || !req.body.taxId) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
-
-        return;
-    }
-
-    const product = {
-        name: req.body.name,
-        price: req.body.price,
-        categoryId: req.body.categoryId,
-        taxId: req.body.taxId,
-        featured: req.body.featured ? req.body.featured : false,
-        visible: req.body.visible ? req.body.visible : true
-    };
-
-    Product.create(product).then(data => {
+ 
+    Product.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

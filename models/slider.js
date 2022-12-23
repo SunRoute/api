@@ -9,11 +9,20 @@ module.exports = function(sequelize, DataTypes) {
         },
         name: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo name no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo name obligatorio"
+                }
+            }
         },
         visible: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
         }
     }, {
         sequelize,

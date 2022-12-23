@@ -4,22 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.fingerprintId) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
 
-        return;
-    }
-
-    const shoppingCart = {
-        customerId: req.body.customerId,
-        fingerprintId: req.body.fingerprintId,
-        status: req.body.status ? req.body.status : true
-    };
-
-    ShoppingCart.create(shoppingCart).then(data => {
+    ShoppingCart.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

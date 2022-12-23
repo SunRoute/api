@@ -8,12 +8,25 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true
         },
         type: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false,
+            validate: {
+                isInt:{
+                    msg: "type debe ser un número"
+                },
+                notEmpty:{
+                    msg: "El campo type no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo type obligatorio"
+                }
+            }
         },
         valid: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
+
         }
     }, {
         sequelize,

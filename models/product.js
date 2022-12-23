@@ -25,19 +25,40 @@ module.exports = function(sequelize, DataTypes) {
         },
         name: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo name no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo name obligatorio"
+                }
+            }
         },
         price: {
-            type: DataTypes.DECIMAL(6,2),
-            allowNull: false
+            type: DataTypes.DECIMAL(6,2).UNSIGNED,
+            allowNull: false,
+            validate: {
+                isDecimal:{
+                    msg: "price debe ser un número y el decimal se debe separar con un punto (0.00)"
+                },
+                notEmpty:{
+                    msg: "El campo price no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo price obligatorio"
+                }
+            }
         },
         featured: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false
         },
         visible: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
         }
     }, {
         sequelize,

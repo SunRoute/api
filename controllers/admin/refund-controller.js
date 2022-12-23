@@ -4,26 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.paymentMethodId || !req.body.reference || !req.body.totalPrice || !req.body.basePrice || !req.body.totalTaxPrice) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
 
-        return;
-    }
-
-    const refund = {
-        shoppingCartId: req.body.shoppingCartId,
-        customerId: req.body.customerId,
-        paymentMethodId: req.body.paymentMethodId,
-        reference: req.body.reference,
-        totalPrice: req.body.totalPrice,
-        basePrice: req.body.basePrice,
-        totalTaxPrice: req.body.totalTaxPrice
-    };
-
-    Refund.create(refund).then(data => {
+    Refund.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
