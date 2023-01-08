@@ -4,26 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.languageAlias || !req.body.entity || !req.body.entityKey || !req.body.key || !req.body.value) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
 
-        return;
-    }
-
-    const locale = {
-        languageAlias: req.body.languageAlias,
-        entity: req.body.entity,
-        entityKey: req.body.entityKey,
-        key: req.body.key,
-        value: req.body.value
-
-        
-    };
-
-    Locale.create(locale).then(data => {
+    Locale.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

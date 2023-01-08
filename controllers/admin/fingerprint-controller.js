@@ -5,20 +5,7 @@ const Op = db.Sequelize.Op;
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.fingerprint) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
-
-        return;
-    }
-
-    const fingerprint = {
-        fingerprint: req.body.fingerprint,
-        customerId: req.body.customerId,
-    };
-
-    Fingerprint.create(fingerprint).then(data => {
+    Fingerprint.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

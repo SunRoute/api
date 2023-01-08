@@ -4,29 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.tradingName  || !req.body.cif  || !req.body.adress || !req.body.city || !req.body.postalCode || !req.body.phone || !req.body.email || !req.body.timetable || !req.body.openingDays) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
 
-        return;
-    }
-
-    const business = {
-        tradingName: req.body.tradingName,
-        cif: req.body.cif,
-        adress: req.body.adress,
-        city: req.body.city,
-        postalCode: req.body.postalCode,
-        phone: req.body.phone,
-        email: req.body.email,
-        timetable: req.body.timetable,
-        openingDays: req.body.openingDays
-        
-    };
-
-    Business.create(business).then(data => {
+    Business.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

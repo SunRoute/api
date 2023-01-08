@@ -17,7 +17,18 @@ module.exports = function(sequelize, DataTypes) {
         },
         fingerprint: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isAlphanumeric:{
+                    msg: "fingerprint solo puede contener letras o números"
+                },
+                notEmpty:{
+                    msg: "El campo fingerprint no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo fingerprint obligatorio"
+                }
+            }
         }
     }, {
         sequelize,

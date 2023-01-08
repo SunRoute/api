@@ -9,15 +9,35 @@ module.exports = function(sequelize, DataTypes) {
         },
         name: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo name no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo name obligatorio"
+                }
+            }
         },
         alias: {
             type: DataTypes.STRING(2),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isAlpha:{
+                    msg: "alias debe contener dos letras"
+                },
+                notEmpty:{
+                    msg: "El campo alias no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo alias obligatorio"
+                }
+            }
         },
         visible: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
         }
     }, {
         sequelize,

@@ -5,34 +5,7 @@ const Op = db.Sequelize.Op;
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.imageOriginalId || !req.body.imageSettingsId || !req.body.title || !req.body.alt ||!req.body.path || !req.body.languageAlias || !req.body.entity || !req.body.entityKey || !req.body.filename || !req.body.content || !req.body.mimeType || !req.body.grid || !req.body.sizeBytes || !req.body.widthPx || !req.body.heightPx || !req.body.quality) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
-
-        return;
-    }
-
-    const imageResize = {
-        imageOriginalId: req.body.imageOriginalId,
-        imageSettingsId: req.body.imageSettingsId,
-        title: req.body.title,
-        alt: req.body.alt,
-        path: req.body.path,
-        languageAlias: req.body.languageAlias,
-        entity: req.body.entity,
-        entityKey: req.body.entityKey,
-        filename: req.body.filename,
-        content: req.body.content,
-        mimeType: req.body.mimeType,
-        grid: req.body.grid,
-        sizeBytes: req.body.sizeBytes,
-        widthPx: req.body.widthPx,
-        heightPx: req.body.heightPx,
-        quality: req.body.quality,
-    };
-
-    ImageResize.create(imageResize).then(data => {
+    ImageResize.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

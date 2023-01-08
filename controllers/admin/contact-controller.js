@@ -4,25 +4,8 @@ const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
-    
-    if (!req.body.name || !req.body.surname || !req.body.phone || !req.body.email || !req.body.message) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
 
-        return;
-    }
-
-    const contact = { 
-        name: req.body.name,
-        surname: req.body.surname,
-        phone: req.body.phone,
-        email: req.body.email,
-        message: req.body.message,
-        fingerprintId: req.body.fingerprintId
-    };
-
-    Contact.create(contact).then(data => {
+    Contact.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({

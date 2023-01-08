@@ -17,23 +17,66 @@ module.exports = function(sequelize, DataTypes) {
         },
         name: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo name no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo name obligatorio"
+                }
+            }
         },
         surname: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo surname no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo surname obligatorio"
+                }
+            }
         },
         phone: {
             type: DataTypes.STRING(10),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo phone no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo phone obligatorio"
+                }
+            }
         },
         email: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: false,
+            validator: {
+                isEmail: {
+                    msg: 'Se debe rellenar el campo email en un formato válido.'
+                },
+                notEmpty:{
+                    msg: "El campo email no puede estar vacío"
+                },
+                notNull: {
+                    msg: 'Campo email obligatorio'
+                }
+            }
         },
         message: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty:{
+                    msg: "El campo message no puede estar vacío"
+                },
+                notNull:{
+                    msg: "Campo message obligatorio"
+                }
+            }
         }
     }, {
         sequelize,

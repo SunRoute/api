@@ -5,28 +5,7 @@ const Op = db.Sequelize.Op;
 // MÉTODO POST
 exports.create = (req, res) => {
     
-    if (!req.body.entity || !req.body.directory || !req.body.type || !req.body.content || !req.body.grid || !req.body.acceptedContent || !req.body.extensionConversion || !req.body.widthPx || !req.body.heightPx || !req.body.quality) {
-        res.status(400).send({
-            message: "Faltan campos por rellenar."
-        });
-
-        return;
-    }
-
-    const imageSetting = {
-        entity: req.body.entity,
-        directory: req.body.directory,
-        type: req.body.type,
-        content: req.body.content,
-        grid: req.body.grid,
-        acceptedContent: req.body.acceptedContent,
-        extensionConversion: req.body.extensionConversion,
-        widthPx: req.body.widthPx,
-        heightPx: req.body.heightPx,
-        quality: req.body.quality   
-    };
-
-    ImageSetting.create(imageSetting).then(data => {
+    ImageSetting.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
