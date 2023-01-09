@@ -2,7 +2,7 @@ module.exports = app => {
 
     const router = require("express").Router();
     const authJwt  = require("../middlewares/auth-jwt.js");
-    const controller = require("../controllers/admin/customer-controller.js");
+    const controller = require("../controllers/admin/faq-controller.js");
 
     app.use(function(req, res, next) {
         res.header(
@@ -18,5 +18,5 @@ module.exports = app => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/customers', router);
+    app.use('/api/admin/faqs', router);
 };

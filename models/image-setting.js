@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         type: {
             type: DataTypes.STRING(255),
-            allowNull: true,
+            allowNull: false,
             validate: {
                 notEmpty:{
                     msg: "El campo type no puede estar vacío"
@@ -45,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         content: {
             type: DataTypes.STRING(255),
-            allowNull: true,
+            allowNull: false,
             validate: {
                 notEmpty:{
                     msg: "El campo content no puede estar vacío"

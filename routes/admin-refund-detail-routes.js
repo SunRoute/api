@@ -2,7 +2,7 @@ module.exports = app => {
 
     const router = require("express").Router();
     const authJwt  = require("../middlewares/auth-jwt.js");
-    const controller = require("../controllers/admin/tax-controller.js");
+    const controller = require("../controllers/admin/refund-detail-controller.js");
 
     app.use(function(req, res, next) {
         res.header(
