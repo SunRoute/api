@@ -1,47 +1,39 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Faq', {
+    return sequelize.define('FaqCategory', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        faqCategoryId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: 'faq_categories',
-                key: 'id'
-            }
-        },
-        question: {
+        name: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo question no puede estar vacío"
+                    msg: "El campo name no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo question obligatorio"
+                    msg: "Campo name obligatorio"
                 }
             }
         },
-        answer: {
+        description: {
             type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo answer no puede estar vacío"
+                    msg: "El campo description no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo answer obligatorio"
+                    msg: "Campo description obligatorio"
                 }
             }
         }
     }, {
         sequelize,
-        tableName: 'faqs',
+        tableName: 'faq_categories',
         timestamps: true,
         paranoid: true,
         indexes: [
@@ -51,13 +43,6 @@ module.exports = function(sequelize, DataTypes) {
                 using: "BTREE",
                 fields: [
                     { name: "id" },
-                ]
-            },
-            {
-                name: "faqCategoryId",
-                using: "BTREE",
-                fields: [
-                    { name: "faqCategoryId" },
                 ]
             },
         ]

@@ -1,11 +1,11 @@
 const db = require("../../models");
-const Faq = db.Faq;
+const FaqCategory = db.FaqCategory;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
 exports.create = (req, res) => {
 
-    Faq.create(req.body).then(data => {
+    FaqCategory.create(req.body).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -19,11 +19,8 @@ exports.findAll = (req, res) => {
 
     let whereStatement = {};
 
-    if(req.query.categoryId)
-        whereStatement.categoryId = {[Op.substring]: req.query.categoryId};
-
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    Faq.findAll({ where: condition }).then(data => {
+    FaqCategory.findAll({ where: condition }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({
@@ -35,7 +32,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    Faq.findByPk(id).then(data => {
+    FaqCategory.findByPk(id).then(data => {
         if (data) {
             res.status(200).send(data);
         } else {
@@ -56,7 +53,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Faq.update(req.body, {
+    FaqCategory.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -80,7 +77,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    Faq.destroy({
+    FaqCategory.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {
