@@ -1,9 +1,9 @@
 module.exports = app => {
 
     const router = require("express").Router();
-    const controller = require("../controllers/front/contact-controller.js");
+    const controller = require("../controllers/front/checkout-controller.js");
     
     router.post("/", controller.sendEmail);
     
-    app.use('/api/front/contact', router);
+    app.use('/api/front/checkout', router);
 };

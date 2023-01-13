@@ -18,5 +18,5 @@ module.exports = app => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/sale-errors', router);
+    app.use('/api/admin/sale-error', router);
 };

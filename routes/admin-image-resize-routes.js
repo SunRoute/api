@@ -18,5 +18,5 @@ module.exports = app => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/image-resizes', router);
+    app.use('/api/admin/admin-image-resize', router);
 };

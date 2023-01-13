@@ -3,6 +3,8 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const dotenv = require('dotenv').config();
 const process = require('process');
+const db = require("../models");
+const Email = db.Email;
 
 module.exports = class EmailService {
 
@@ -73,10 +75,22 @@ module.exports = class EmailService {
         }
 
         this.transport.sendMail(mailOptions, function (err, result) {
+            
             if (err) {
                 console.log(err);
+
             } else {
-               // Aquí podríamos registrar en una base de datos los correos enviados
+
+                const emails = {
+                    email: destination,
+                    message: email.content
+                };
+
+                Email.create(emails).then(data =>{
+                    console.log(data);
+                }).catch(err => {
+                    console.log(err);
+                });
             }
         });
     }

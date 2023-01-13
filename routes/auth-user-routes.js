@@ -12,5 +12,5 @@ module.exports = app => {
         next();
     });
 
-    app.post("/api/auth/users/signin", auth.signin);
+    app.post("/api/auth/user/signin", auth.signin);
 };
