@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = (app, upload) => {
 
     const router = require("express").Router();
     // Router ES UNA FUNCIÓN DE EXPRESS QUE SIRVE PARA CREAR RUTAS

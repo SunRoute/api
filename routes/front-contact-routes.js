@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = (app, upload) => {
 
     const router = require("express").Router();
     const controller = require("../controllers/front/contact-controller.js");

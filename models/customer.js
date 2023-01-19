@@ -1,4 +1,6 @@
 const Sequelize = require('sequelize');
+const emailValidator = require('deep-email-validator')
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('Customer', {
         id: {
@@ -45,15 +47,26 @@ module.exports = function(sequelize, DataTypes) {
         },
         email: {
             type: DataTypes.STRING(255),
-            allowNull: true,
-            validator: {
-                isEmail: {
-                    msg: 'Se debe rellenar el campo email en un formato válido.'
+            allowNull: false,
+            validate: {
+                isEmail: true,
+                customValidator(value) {
+                    return emailValidator.validate(value).then((data) => {
+                        if(data.valid == false){
+                            console.log(data);
+                            if(data.reason == 'typo' || data.reason == 'mx' || data.reason == 'smtp') {
+                                throw new Error("Email incorrecto, verifique que está bien escrito");
+                            }
+                            if(data.reason == 'disposable') {
+                                throw new Error("Email incorrecto, no se permiten emails temporales");
+                            }
+                        }
+                    })
                 },
                 notEmpty:{
                     msg: "El campo email no puede estar vacío"
                 },
-                notNull: {
+                notNull:{
                     msg: 'Campo email obligatorio'
                 }
             }

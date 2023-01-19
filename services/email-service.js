@@ -65,6 +65,12 @@ module.exports = class EmailService {
         return myAccessToken;
     }
 
+    // checkEmail(destination) {
+    //     emailValidator.validate(destination).then((data) => {
+    //         console.log(data);
+    //     })
+    // }
+
     sendEmail(email, destination = this.email) {
 
         const mailOptions = {

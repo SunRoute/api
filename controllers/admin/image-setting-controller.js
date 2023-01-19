@@ -3,55 +3,66 @@ const ImageSetting = db.ImageSetting;
 const Op = db.Sequelize.Op;
 
 // MÉTODO POST
-exports.create = (req, res) => {
-    
-    ImageSetting.create(req.body).then(data => {
-        res.status(200).send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Algún error ha surgido al insertar el dato."
-        });
-    });
-};
+exports.create = async (req, res) => {
 
-// MÉTODO GET
-exports.findAll = (req, res) => {
-
-    let whereStatement = {};
-
-    if(req.query.entity)
-        whereStatement.entity= {[Op.substring]: req.query.entity};
-    if(req.query.grid)
-    whereStatement.grid= {[Op.substring]: req.query.grid};    
-
-    let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    ImageSetting.findAll({ where: condition }).then(data => {
-        res.status(200).send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Algún error ha surgido al recuperar los datos."
-        });
-    });
-};
-
-exports.findOne = (req, res) => {
-
-    const id = req.params.id;
-    ImageSetting.findByPk(id).then(data => {
-        if (data) {
+        try{
+            let data = await ImageSetting.create(req.body);
             res.status(200).send(data);
-        } else {
-            res.status(404).send({
-                message: `No se puede encontrar el elemento con la id=${id}.`
+        }catch(error){
+            res.status(500).send({
+                message: error.message || "Algún error ha surgido al insertar el dato.",
+                errors: error.errors
             });
         }
-
-    }).catch(err => {
-        res.status(500).send({
-            message: "Algún error ha surgido al recuperar la id=" + id
-        });
-    });
 };
+
+    // ImageSetting.create(req.body).then(data => {
+    //     res.status(200).send(data);
+    // }).catch(err => {
+    //     res.status(500).send({
+    //         message: err.message || "Algún error ha surgido al insertar el dato."
+    //     });
+    // });
+
+
+// // MÉTODO GET
+// exports.findAll = (req, res) => {
+
+//     let whereStatement = {};
+
+//     if(req.query.entity)
+//         whereStatement.entity= {[Op.substring]: req.query.entity};
+//     if(req.query.grid)
+//     whereStatement.grid= {[Op.substring]: req.query.grid};    
+
+//     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
+//     ImageSetting.findAll({ where: condition }).then(data => {
+//         res.status(200).send(data);
+//     }).catch(err => {
+//         res.status(500).send({
+//             message: err.message || "Algún error ha surgido al recuperar los datos."
+//         });
+//     });
+// };
+
+// exports.findOne = (req, res) => {
+
+//     const id = req.params.id;
+//     ImageSetting.findByPk(id).then(data => {
+//         if (data) {
+//             res.status(200).send(data);
+//         } else {
+//             res.status(404).send({
+//                 message: `No se puede encontrar el elemento con la id=${id}.`
+//             });
+//         }
+
+//     }).catch(err => {
+//         res.status(500).send({
+//             message: "Algún error ha surgido al recuperar la id=" + id
+//         });
+//     });
+// };
 
 // MÉTODO PUT
 exports.update = (req, res) => {

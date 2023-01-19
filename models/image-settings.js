@@ -19,31 +19,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
             }
         },
-        directory: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            validate: {
-                notEmpty:{
-                    msg: "El campo directory no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo directory obligatorio"
-                }
-            }
-        },
-        type: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            validate: {
-                notEmpty:{
-                    msg: "El campo type no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo type obligatorio"
-                }
-            }
-        },
-        content: {
+        name: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
@@ -55,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
             }
         },
-        grid: {
+        mediaQuery: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
@@ -64,30 +40,6 @@ module.exports = function(sequelize, DataTypes) {
                 },
                 notNull:{
                     msg: "Campo grid obligatorio"
-                }
-            }
-        },
-        acceptedContent: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            validate: {
-                notEmpty:{
-                    msg: "El campo acceptedContent no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo acceptedContent obligatorio"
-                }
-            }
-        },
-        extensionConversion: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            validate: {
-                notEmpty:{
-                    msg: "El campo extensionConversion no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo extensionConversion obligatorio"
                 }
             }
         },

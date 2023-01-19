@@ -4,6 +4,7 @@ const cors = require("cors");
 const fs = require('fs'); 
 const app = express();
 const db = require("./models");
+const multer = require('multer');
 
 var corsOptions = {
     origin: ['http://localhost:8081', 'http://127.0.0.1:5500', 'http://127.0.0.1:5501']
@@ -15,11 +16,22 @@ app.use(express.json({limit: "10mb", extended: true}))
 app.use(express.urlencoded({limit: "10mb", extended: true, parameterLimit: 50000}))
 // CÓMO SE VAN A RECIBIR LLAMADAS. LAS DOS ÚLTIMAS LÍNEAS AMPLIARÁN EL TAMAÑO DE ENVÍO DE LOS PEDIDOS.
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'storage/tmp/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage })
+
 var routePath="./routes/";
 // fs(FILESYSTEM) ES UNA LIBRERÍA NATIVA PARA LEER CARPETAS Y ARCHIVOS.
 fs.readdirSync(routePath).forEach(function(file) {
     // SE HACE UN BUCLE CON LAS RUTAS (routePath) Y LE AÑADE EL ARCHIVO Y COMO PARÁMETRO SE LE PASA app(EXPRESS)
-    require(routePath + file)(app);
+    require(routePath + file)(app, upload);
 });
 
 const PORT = process.env.PORT || 8080;
