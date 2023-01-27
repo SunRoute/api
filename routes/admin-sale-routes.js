@@ -18,5 +18,5 @@ module.exports = (app, upload) => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/admin-sale', router);
+    app.use('/api/admin/sale', router);
 };

@@ -1,19 +1,11 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('ImageResize', {
+    return sequelize.define('Image', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
-        },
-        imageOriginalId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: 'image_originals',
-                key: 'id'
-            }
         },
         imageSettingsId: {
             type: DataTypes.INTEGER,
@@ -101,51 +93,51 @@ module.exports = function(sequelize, DataTypes) {
                 }
             }
         },
-        filename: {
+        originalFilename: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo filename no puede estar vacío"
+                    msg: "El campo originalFilename no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo filename obligatorio"
+                    msg: "Campo originalFilename obligatorio"
                 }
             }
         },
-        content: {
+        resizedFilename: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo content no puede estar vacío"
+                    msg: "El campo resizedFilename no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo content obligatorio"
+                    msg: "Campo resizedFilename obligatorio"
                 }
             }
         },
-        mimeType: {
+        name: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo mimeType no puede estar vacío"
+                    msg: "El campo name no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo mimeType obligatorio"
+                    msg: "Campo name obligatorio"
                 }
             }
         },
-        grid: {
+        mediaQuery: {
             type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty:{
-                    msg: "El campo grid no puede estar vacío"
+                    msg: "El campo mediaQuery no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo grid obligatorio"
+                    msg: "Campo mediaQuery obligatorio"
                 }
             }
         },
@@ -164,54 +156,24 @@ module.exports = function(sequelize, DataTypes) {
                 }
             }
         },
-        widthPx: {
+        latency: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
             validate: {
                 isInt:{
-                    msg: "widthPx debe ser un número"
+                    msg: "latency debe ser un número"
                 },
                 notEmpty:{
-                    msg: "El campo widthPx no puede estar vacío"
+                    msg: "El campo latency no puede estar vacío"
                 },
                 notNull:{
-                    msg: "Campo widthPx obligatorio"
-                }
-            }
-        },
-        heightPx: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
-            validate: {
-                isInt:{
-                    msg: "heightPx debe ser un número"
-                },
-                notEmpty:{
-                    msg: "El campo heightPx no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo heightPx obligatorio"
-                }
-            }
-        },
-        quality: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
-            validate: {
-                isInt:{
-                    msg: "quality debe ser un número"
-                },
-                notEmpty:{
-                    msg: "El campo quality no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo quality obligatorio"
+                    msg: "Campo latency obligatorio"
                 }
             }
         }
     }, {
         sequelize,
-        tableName: 'image_resizes',
+        tableName: 'images',
         timestamps: true,
         paranoid: true,
         indexes: [
@@ -221,13 +183,6 @@ module.exports = function(sequelize, DataTypes) {
                 using: "BTREE",
                 fields: [
                     { name: "id" },
-                ]
-            },
-            {
-                name: "imageOriginalId",
-                using: "BTREE",
-                fields: [
-                    { name: "imageOriginalId" },
                 ]
             },
             {

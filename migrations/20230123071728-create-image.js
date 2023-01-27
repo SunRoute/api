@@ -4,22 +4,12 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
    
-    await queryInterface.createTable('image_resizes', {
+    await queryInterface.createTable('images', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      imageOriginalId: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        references: { 
-          model: 'image_originals', 
-          key: 'id' 
-          }, 
-          onUpdate: 'CASCADE', 
-          onDelete: 'SET NULL'
       },
       imageSettingsId: {
         allowNull: true,
@@ -55,19 +45,19 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER.UNSIGNED
       },
-      filename: {
+      originalFilename: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      content: {
+      resizedFilename: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      mimeType: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      grid: {
+      mediaQuery: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -75,17 +65,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER.UNSIGNED
       },
-      widthPx: {
+      latency: {
         allowNull: false,
-        type: Sequelize.INTEGER(4).UNSIGNED
-      },
-      heightPx: {
-        allowNull: false,
-        type: Sequelize.INTEGER(4).UNSIGNED
-      },
-      quality: {
-        allowNull: false,
-        type: Sequelize.INTEGER(3).UNSIGNED
+        type: Sequelize.INTEGER.UNSIGNED
       },
       createdAt: {
         allowNull: false,
@@ -104,7 +86,8 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
    
-    await queryInterface.dropTable('image_resizes');
+    await queryInterface.dropTable('images');
   }
 };
+
 

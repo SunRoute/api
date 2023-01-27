@@ -18,5 +18,5 @@ module.exports = (app, upload) => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/admin-payment-methods', router);
+    app.use('/api/admin/payment-methods', router);
 };

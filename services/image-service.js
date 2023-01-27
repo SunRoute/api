@@ -3,10 +3,8 @@ const { getDefaultSettings } = require('http2');
 const path = require('path');
 const sharp = require('sharp');
 const db = require("../models");
-const imageResize = require('../models/image-resize');
-const ImageOriginal = db.ImageOriginal;
 const ImageSetting = db.ImageSetting;
-const ImageResize = db.ImageResize;
+const ImageResize = db.Image;
 
 module.exports = class ImageService {
 

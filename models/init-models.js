@@ -3,8 +3,7 @@ var _Business = require("./business");
 var _Contact = require("./contact");
 var _Customer = require("./customer");
 var _Fingerprint = require("./fingerprint");
-var _ImageOriginal = require("./image-original");
-var _ImageResize = require("./image-resize");
+var _Image = require("./image");
 var _ImageSetting = require("./image-setting");
 var _Language = require("./language");
 var _Locale = require("./locale");
@@ -26,8 +25,7 @@ function initModels(sequelize) {
     var Contact = _Contact(sequelize, DataTypes);
     var Customer = _Customer(sequelize, DataTypes);
     var Fingerprint = _Fingerprint(sequelize, DataTypes);
-    var ImageOriginal = _ImageOriginal(sequelize, DataTypes);
-    var ImageResize = _ImageResize(sequelize, DataTypes);
+    var Image = _Image(sequelize, DataTypes);
     var ImageSetting = _ImageSetting(sequelize, DataTypes);
     var Language = _Language(sequelize, DataTypes);
     var Locale = _Locale(sequelize, DataTypes);
@@ -58,10 +56,8 @@ function initModels(sequelize) {
     Fingerprint.hasMany(Contact, { as: "contacts", foreignKey: "fingerprintId"});
     ShoppingCart.belongsTo(Fingerprint, { as: "fingerprint", foreignKey: "fingerprintId"});
     Fingerprint.hasMany(ShoppingCart, { as: "shopping_carts", foreignKey: "fingerprintId"});
-    ImageResize.belongsTo(ImageOriginal, { as: "imageOriginal", foreignKey: "imageOriginalId"});
-    ImageOriginal.hasMany(ImageResize, { as: "image_resizes", foreignKey: "imageOriginalId"});
-    ImageResize.belongsTo(ImageSetting, { as: "imageSetting", foreignKey: "imageSettingsId"});
-    ImageSetting.hasMany(ImageResize, { as: "image_resizes", foreignKey: "imageSettingsId"});
+    Image.belongsTo(ImageSetting, { as: "imageSetting", foreignKey: "imageSettingsId"});
+    ImageSetting.hasMany(Image, { as: "images", foreignKey: "imageSettingsId"});
     Refund.belongsTo(PaymentMethod, { as: "paymentMethod", foreignKey: "paymentMethodId"});
     PaymentMethod.hasMany(Refund, { as: "refunds", foreignKey: "paymentMethodId"});
     SaleError.belongsTo(PaymentMethod, { as: "paymentMethod", foreignKey: "paymentMethodId"});
@@ -96,8 +92,7 @@ function initModels(sequelize) {
         Contact,
         Customer,
         Fingerprint,
-        ImageOriginal,
-        ImageResize,
+        Image,
         ImageSetting,
         Language,
         Locale,

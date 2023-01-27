@@ -2,7 +2,7 @@ module.exports = (app, upload) => {
 
     const router = require("express").Router();
     const authJwt  = require("../middlewares/auth-jwt.js");
-    const controller = require("../controllers/admin/image-resize-controller.js");
+    const controller = require("../controllers/admin/image-controller.js");
 
     app.use(function(req, res, next) {
         res.header(
@@ -18,5 +18,5 @@ module.exports = (app, upload) => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/admin-image-resize', router);
+    app.use('/api/admin/image', router);
 };

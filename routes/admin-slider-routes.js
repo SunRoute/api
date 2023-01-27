@@ -19,5 +19,5 @@ module.exports = (app, upload) => {
     router.put("/:id", [authJwt.verifyUserToken], controller.update);  
     router.delete("/:id", [authJwt.verifyUserToken], controller.delete);
     
-    app.use('/api/admin/admin-slider', router);
+    app.use('/api/admin/slider', router);
 };

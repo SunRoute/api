@@ -1,30 +1,52 @@
 const db = require("../../models");
-const ImageOriginal = db.ImageOriginal;
+const MenuItem = db.MenuItem;
 const Op = db.Sequelize.Op;
 
-// MÉTODO POST
-exports.create = (req, res) => {
-    
-    ImageOriginal.create(req.body).then(data => {
+exports.create = async (req, res) => {
+
+    try{
+        let data = await MenuItem.create(req.body);
         res.status(200).send(data);
-    }).catch(err => {
+    }catch(error){
         res.status(500).send({
-            message: err.message || "Algún error ha surgido al insertar el dato."
+            message: error.message || "Algún error ha surgido al insertar el dato.",
+            errors: error.errors
         });
-    });
+    }
 };
 
-// MÉTODO GET
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
 
+    let page = req.query.page || 1;
+    let limit = req.query.size || 10;
+    let offset = (page - 1) * limit;
     let whereStatement = {};
 
-    if(req.query.entity)
-        whereStatement.entity= {[Op.substring]: req.query.entity};    
+    for (let key in req.query) {
+        if (req.query[key] != "" && key != "page" && key != "size") {
+            whereStatement[key] = {[Op.substring]: req.query[key]};
+        }
+    }
 
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    ImageOriginal.findAll({ where: condition }).then(data => {
-        res.status(200).send(data);
+
+    MenuItem.findAndCountAll({
+        where: condition, 
+        attributes: ['id', 'name', 'customUrl'],
+        limit: limit,
+        offset: offset,
+        order: [['createdAt', 'DESC']]
+    })
+    .then(result => {
+
+        result.meta = {
+            total: result.count,
+            pages: Math.ceil(result.count / limit),
+            currentPage: page
+        };
+
+        res.status(200).send(result);
+
     }).catch(err => {
         res.status(500).send({
             message: err.message || "Algún error ha surgido al recuperar los datos."
@@ -35,7 +57,9 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     const id = req.params.id;
-    ImageOriginal.findByPk(id).then(data => {
+
+    MenuItem.findByPk(id).then(data => {
+
         if (data) {
             res.status(200).send(data);
         } else {
@@ -51,12 +75,11 @@ exports.findOne = (req, res) => {
     });
 };
 
-// MÉTODO PUT
 exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    ImageOriginal.update(req.body, {
+    MenuItem.update(req.body, {
         where: { id: id }
     }).then(num => {
         if (num == 1) {
@@ -75,12 +98,11 @@ exports.update = (req, res) => {
     });
 };
 
-// MÉTODO DELETE
 exports.delete = (req, res) => {
 
     const id = req.params.id;
 
-    ImageOriginal.destroy({
+    MenuItem.destroy({
         where: { id: id }
     }).then(num => {
         if (num == 1) {
