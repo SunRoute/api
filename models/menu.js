@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING(255),
             allowNull: false,
-            validator: {
+            validate: {
                 notNull: {
                     msg: 'Por favor, rellena el campo "Nombre".'
                 }
@@ -21,12 +21,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         order: {
             type: DataTypes.INTEGER,
-            defaultValue: 1,
-            validator: {
-                notNull: {
-                    msg: 'Por favor, rellena el campo "Orden".'
-                }
-            }
+            defaultValue: 1
         },
         parentId: {
             type: DataTypes.INTEGER

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING(255),
             allowNull: false,
-            validator: {
+            validate: {
                 notNull: {
                     msg: 'Por favor, rellena el campo "Nombre".'
                 }
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
                 args: true,
                 msg: 'Ya existe un usuario con ese correo electrónico.'
             },
-            validator: {
+            validate: {
                 notNull: {
                     msg: 'Por favor, rellena el campo "Email".'
                 },
@@ -37,12 +37,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         password: {
             type: DataTypes.STRING(255),
-            allowNull: true,
-            validator: {
-                notNull: {
-                    msg: 'Por favor, rellena el campo "Contraseña".'
-                }
-            }
+            allowNull: true
         }
     }, {
         sequelize,
