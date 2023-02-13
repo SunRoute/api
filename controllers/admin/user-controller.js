@@ -16,10 +16,17 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 
     let page = req.query.page || 1;
-    let limit = req.query.size || 10;
+    let limit = parseInt(req.query.size) || 10;
     let offset = (page - 1) * limit;
 
     let whereStatement = {};
+
+    for (let key in req.query) {
+        if (req.query[key] != "" && key != "page" && key != "size" && key != "password") {
+            whereStatement[key] = {[Op.substring]: req.query[key]};
+        }
+    }
+
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
 
     User.findAndCountAll({

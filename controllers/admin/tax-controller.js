@@ -21,21 +21,39 @@ exports.create = (req, res) => {
 // MÉTODO GET
 exports.findAll = (req, res) => {
 
+    let page = req.query.page || 1;
+    let limit = parseInt(req.query.size) || 10;
+    let offset = (page - 1) * limit;
+
     let whereStatement = {};
 
-    if(req.query.valid)
-        // SI VIENE UN PARÁMETRO valid, SE CREA EL OBJETO (whereStatement.valid). ESTO ES EQUIVALENTE A HACER LA CONSULTA A LA BDD.
-        whereStatement.valid = {[Op.substring]: req.query.valid};
-        // EN ESTE CASO SE ESTÁ UTILIZANDO . OTRA OPCIÓN a substring ES USAR like, PERO EN ESE CASO SE CONCATENARÍA -> `%${req.query.valid}%`
+    for (let key in req.query) {
+        if (req.query[key] != "" && key != "page" && key != "size") {
+            whereStatement[key] = {[Op.substring]: req.query[key]};
+        }
+    }
+
     let condition = Object.keys(whereStatement).length > 0 ? {[Op.and]: [whereStatement]} : {};
-    // SI whereStatement TIENE ALGO AÑADIRÍA LOS DATOS, HASTA LA LONGITUD, MEDIANTE and
-    Tax.findAll({ where: condition }).then(data => {
-        // MODIFICA UN REGISTRO A PARTIR DE LOS DATOS (findAll) Y SI VA BIEN RECOGE LA RESPUESTA DE LA BASE DE DATOS (then)
-        res.status(200).send(data);
+
+    Tax.findAndCountAll({
+        where: condition, 
+        limit: limit,
+        offset: offset,
+        order: [['createdAt', 'DESC']]
+    })
+    .then(result => {
+
+        result.meta = {
+            total: result.count,
+            pages: Math.ceil(result.count / limit),
+            currentPage: page
+        };
+
+        res.status(200).send(result);
+
     }).catch(err => {
-        // SI OCURRE ALGÚN ERROR
         res.status(500).send({
-            message: err.message || "Algún error ha surgido al recuperar los datos."
+            message: err.errors || "Algún error ha surgido al recuperar los datos."
         });
     });
 };
