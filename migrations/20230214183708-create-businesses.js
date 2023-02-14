@@ -33,7 +33,7 @@ module.exports = {
       },
       phone: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.STRING(13)
       },
       email: {
         allowNull: false,
@@ -67,3 +67,4 @@ module.exports = {
     await queryInterface.dropTable('businesses');
   }
 };
+
