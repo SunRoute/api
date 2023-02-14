@@ -32,7 +32,7 @@ exports.findAll = async (req, res) => {
 
     Menu.findAndCountAll({
         where: condition, 
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'customUrl'],
         limit: limit,
         offset: offset,
         order: [['createdAt', 'DESC']]
