@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Faq', {
+    const Faq = sequelize.define('Faq', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -52,14 +52,11 @@ module.exports = function(sequelize, DataTypes) {
                 fields: [
                     { name: "id" },
                 ]
-            },
-            {
-                name: "faqCategoryId",
-                using: "BTREE",
-                fields: [
-                    { name: "faqCategoryId" },
-                ]
-            },
+            }
         ]
     });
+    Faq.associate = function(models){
+        Faq.belongsTo(models.FaqCategory, { as: "faq_categories", foreignKey: "faqCategoryId"});
+    };
+    return Faq;
 };

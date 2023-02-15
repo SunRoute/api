@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Refund', {
+    const Refund = sequelize.define('Refund', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -118,21 +118,15 @@ module.exports = function(sequelize, DataTypes) {
                 fields: [
                     { name: "saleId" },
                 ]
-            },
-            {
-                name: "customerId",
-                using: "BTREE",
-                fields: [
-                    { name: "customerId" },
-                ]
-            },
-            {
-                name: "paymentMethodId",
-                using: "BTREE",
-                fields: [
-                    { name: "paymentMethodId" },
-                ]
-            },
+            }
         ]
     });
+    Refund.associate = function(models){
+        Refund.belongsTo(models.Customer, { as: "customers", foreignKey: "customerId"});
+        Refund.belongsTo(models.PaymentMethod, { as: "payment_methods", foreignKey: "payMethodId"});
+        Refund.hasMany(models.RefundDetail, { as: "payback_details", foreignKey: "paybackId"});
+        Refund.belongsTo(models.Sale, { as: "sales", foreignKey: "saleId"});
+    };
+
+    return Refund;
 };

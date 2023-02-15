@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Image', {
+    const ImageResize = sequelize.define('Image', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -36,18 +36,6 @@ module.exports = function(sequelize, DataTypes) {
                 },
                 notNull:{
                     msg: "Campo alt obligatorio"
-                }
-            }
-        },
-        path: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            validate: {
-                notEmpty:{
-                    msg: "El campo path no puede estar vacío"
-                },
-                notNull:{
-                    msg: "Campo path obligatorio"
                 }
             }
         },
@@ -194,4 +182,9 @@ module.exports = function(sequelize, DataTypes) {
             },
         ]
     });
+    ImageResize.associate = function(models) {
+        ImageResize.belongsTo(models.ImageSetting, { foreignKey: 'imageSettingsId' });
+    };
+
+    return ImageResize;
 };

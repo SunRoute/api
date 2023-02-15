@@ -29,10 +29,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      path: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       languageAlias: {
         allowNull: false,
         type: Sequelize.STRING(2)

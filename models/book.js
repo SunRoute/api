@@ -71,7 +71,7 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         publishedDate: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false,
             validate: {
                 isDate:{

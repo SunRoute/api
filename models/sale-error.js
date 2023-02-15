@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('SaleError', {
+    const SaleError = sequelize.define('SaleError', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -68,28 +68,14 @@ module.exports = function(sequelize, DataTypes) {
                 fields: [
                     { name: "id" },
                 ]
-            },
-            {
-                name: "shoppingCartId",
-                using: "BTREE",
-                fields: [
-                    { name: "shoppingCartId" },
-                ]
-            },
-            {
-                name: "customerId",
-                using: "BTREE",
-                fields: [
-                    { name: "customerId" },
-                ]
-            },
-            {
-                name: "paymentMethodId",
-                using: "BTREE",
-                fields: [
-                    { name: "paymentMethodId" },
-                ]
-            },
+            }
         ]
     });
+    SaleError.associate = function(models){
+        SaleError.belongsTo(models.ShoppingCart, { as: "cart", foreignKey: "shoppingCartId"});
+        SaleError.belongsTo(models.Customer, { as: "customers", foreignKey: "customerId"});
+        SaleError.belongsTo(models.PaymentMethod, { as: "payment-methods", foreignKey: "paymentMethodId"});
+    };
+
+    return SaleError;
 };

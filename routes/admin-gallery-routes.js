@@ -2,7 +2,7 @@ module.exports = (app, upload) => {
 
     const router = require("express").Router();
     const authJwt  = require("../middlewares/auth-jwt.js");
-    const controller = require("../controllers/admin/image-gallery-controller.js");
+    const controller = require("../controllers/admin/gallery-controller.js");
   
     app.use(function(req, res, next) {
       res.header(
@@ -20,5 +20,5 @@ module.exports = (app, upload) => {
     router.get("/", [authJwt.verifyUserToken], controller.findAll);  
     router.delete("/:filename", [authJwt.verifyUserToken], controller.delete);
   
-    app.use('/api/admin/image-gallery', router);
+    app.use('/api/admin/gallery', router);
   };

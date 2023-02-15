@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('ShoppingCartDetail', {
+    const ShoppingCartDetail = sequelize.define('ShoppingCartDetail', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -105,21 +105,13 @@ module.exports = function(sequelize, DataTypes) {
                 fields: [
                     { name: "id" },
                 ]
-            },
-            {
-                name: "shoppingCartId",
-                using: "BTREE",
-                fields: [
-                    { name: "shoppingCartId" },
-                ]
-            },
-            {
-                name: "productId",
-                using: "BTREE",
-                fields: [
-                    { name: "productId" },
-                ]
-            },
+            }
         ]
     });
+    ShoppingCartDetail.associate = function(models) {
+        ShoppingCartDetail.belongsTo(models.ShoppingCart, { as: "shopping_carts", foreignKey: "shoppingCartId"});
+        ShoppingCartDetail.belongsTo(models.Product, { as: "products", foreignKey: "productId"});
+    };
+
+    return ShoppingCartDetail;
 };
