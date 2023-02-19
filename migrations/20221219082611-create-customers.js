@@ -21,7 +21,7 @@ module.exports = {
       },
       phone: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.STRING(12)
       },
       adress: {
         allowNull: false,

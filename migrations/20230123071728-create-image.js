@@ -11,7 +11,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      imageSettingsId: {
+      imageSettingId: {
         allowNull: true,
         type: Sequelize.INTEGER,
         references: { 

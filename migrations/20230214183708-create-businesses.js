@@ -33,7 +33,7 @@ module.exports = {
       },
       phone: {
         allowNull: false,
-        type: Sequelize.STRING(13)
+        type: Sequelize.STRING(12)
       },
       email: {
         allowNull: false,

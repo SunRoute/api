@@ -51,38 +51,53 @@ module.exports = class ImageService {
         return result;
     }
 
+
     resizeImages = async (entity, entityId, images) => {
 
         try{
 
-            for (let key in images) {
+            for (let image in images) {
 
-                if (key.startsWith('images')) {
-    
-                    let keySplit = key.split('-');
-                    let name = keySplit[1];
-                    let languageAlias = keySplit[2];
-                    let originalFilenames = images[key].split(',');
-    
-                    const imageSettings =  await ImageSetting.findAll({
-                        where: {
-                            entity: entity,
-                            name: name
-                        }
-                    });
-    
-                    for (let imageSetting of imageSettings) {
+                const imageSettings =  await ImageSetting.findAll({
+                    where: {
+                        entity: entity,
+                        name: images[image].name
+                    }
+                });
 
-                        for (let originalFilename of originalFilenames) {
-        
+                for (let imageSetting of imageSettings) {
+
+                    if(images[image].delete){
+
+                        let resizedFilename = `${path.parse(images[image].filename).name}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`;
+
+                        Image.destroy({
+                            where: { 
+                                entity: entity,
+                                entityId: entityId,
+                                name: images[image].name,
+                                languageAlias: images[image].languageAlias,
+                                resizedFilename: resizedFilename
+                            }
+                        });
+
+                    }
+                    
+                    if(images[image].update){
+
+                        let resizedFilename = `${path.parse(images[image].filename).name}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`;
+                        let previousResizedFilename = `${path.parse(images[image].previousImage).name}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`;
+
+                        if(images[image].filename != images[image].previousImage){
+                            
                             let imageResize = {};
-        
-                            await fs.access(path.join(__dirname, `../storage/images/resized/${originalFilename}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`)).then(async () => {
-        
+
+                            await fs.access(path.join(__dirname, `../storage/images/resized/${resizedFilename}`)).then(async () => {
+    
                                 let start = new Date().getTime();
         
-                                let stats = await fs.stat(path.join(__dirname, `../storage/images/resized/${originalFilename}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`));
-                                imageResize = await sharp(path.join(__dirname, `../storage/images/resized/${originalFilename}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`)).metadata();
+                                let stats = await fs.stat(path.join(__dirname, `../storage/images/resized/${resizedFilename}`));
+                                imageResize = await sharp(path.join(__dirname, `../storage/images/resized/${resizedFilename}`)).metadata();
                                 imageResize.size = stats.size;
         
                                 let end = new Date().getTime();
@@ -93,38 +108,110 @@ module.exports = class ImageService {
         
                                 let start = new Date().getTime();
                                 
-                                imageResize = await sharp(path.join(__dirname, `../storage/images/gallery/original/${originalFilename}`))
+                                imageResize = await sharp(path.join(__dirname, `../storage/images/gallery/original/${images[image].filename}`))
                                 .resize(imageSetting.widthPx, imageSetting.heightPx)
                                 .webp({ nearLossless: true })
-                                .toFile(path.join(__dirname, `../storage/images/resized/${originalFilename}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`));
-                                
+                                .toFile(path.join(__dirname, `../storage/images/resized/${resizedFilename}`));
+                                    
                                 let end = new Date().getTime();
         
                                 imageResize.latency = end - start;                        
                             });
-        
-                            await Image.create({
+
+                            Image.update({
                                 imageSettingId: imageSetting.id,
-                                entityId: entityId,
-                                entity: entity,
-                                name: name,
-                                originalFilename: originalFilename,
-                                resizedFilename: `${originalFilename}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`,
-                                title: "prueba",
-                                alt: "prueba",
-                                languageAlias: languageAlias,
                                 mediaQuery: imageSetting.mediaQuery,
                                 sizeBytes: imageResize.size,
                                 latencyMs: imageResize.latency,
-                            });     
+                                title: images[image].title,
+                                alt: images[image].alt,
+                                resizedFilename: resizedFilename,
+                                originalFilename: images[image].filename,
+                            },{
+                                where: { 
+                                    entity: entity,
+                                    entityId: entityId,
+                                    name: images[image].name,
+                                    languageAlias: images[image].languageAlias,
+                                    resizedFilename: previousResizedFilename
+                                }
+                            });
+
+                        }else{
+
+                            Image.update({
+                                title: images[image].title,
+                                alt: images[image].alt,
+                            },{
+                                where: { 
+                                    entity: entity,
+                                    entityId: entityId,
+                                    name: images[image].name,
+                                    languageAlias: images[image].languageAlias,
+                                    resizedFilename: resizedFilename
+                                }
+                            });
                         }
+
                     }
+
+                    if(images[image].create){
+
+                        let imageResize = {};
+                        let resizedFilename = `${path.parse(images[image].filename).name}-${imageSetting.widthPx}x${imageSetting.heightPx}.webp`;
+    
+                        await fs.access(path.join(__dirname, `../storage/images/resized/${resizedFilename}`)).then(async () => {
+    
+                            let start = new Date().getTime();
+    
+                            let stats = await fs.stat(path.join(__dirname, `../storage/images/resized/${resizedFilename}`));
+                            imageResize = await sharp(path.join(__dirname, `../storage/images/resized/${resizedFilename}`)).metadata();
+                            imageResize.size = stats.size;
+    
+                            let end = new Date().getTime();
+    
+                            imageResize.latency = end - start;                        
+    
+                        }).catch(async () => {
+    
+                            let start = new Date().getTime();
+                            
+                            imageResize = await sharp(path.join(__dirname, `../storage/images/gallery/original/${images[image].filename}`))
+                            .resize(imageSetting.widthPx, imageSetting.heightPx)
+                            .webp({ nearLossless: true })
+                            .toFile(path.join(__dirname, `../storage/images/resized/${resizedFilename}`));
+                                
+                            let end = new Date().getTime();
+    
+                            imageResize.latency = end - start;                        
+                        });
+
+                        await Image.create({
+                            imageSettingId: imageSetting.id,
+                            entityId: entityId,
+                            entity: entity,
+                            name: images[image].name,
+                            originalFilename: images[image].filename,
+                            resizedFilename: resizedFilename,
+                            title: images[image].title,
+                            alt: images[image].alt,
+                            languageAlias: images[image].languageAlias,
+                            mediaQuery: imageSetting.mediaQuery,
+                            sizeBytes: imageResize.size,
+                            latency: imageResize.latency
+                        });
+
+                    }    
+                            
                 }
+
             }
 
             return true;
 
-        }catch(error){
+        }
+        
+        catch(error){
 
             console.log(error);
 
@@ -149,22 +236,26 @@ module.exports = class ImageService {
 
         let images = {};
         let files = await fs.readdir(path.join(__dirname, `../storage/images/gallery/thumbnail`));
+        files = files.filter(file => file !== ".gitignore");
 
         images.filenames = await fs.readdir(path.join(__dirname, `../storage/images/gallery/thumbnail`), { limit: limit, offset: offset});
+        images.filenames = images.filenames.filter(file => file !== ".gitignore");
         images.count = files.length;
     
         return images;
     }
 
-    getImages = async (entity, entityId) => {
+    getAdminImages = async (entity, entityId) => {
 
         const images = await Image.findAll({
+            attributes: [['originalFilename','filename'],'name','languageAlias', 'alt', 'title'],
             where: {
-                entity: entity,
-                entityId: entityId
-            }
+              entity: entity,
+              entityId: entityId
+            },
+            group: [['originalFilename','filename'], 'name', 'languageAlias', 'alt', 'title']
         });
-
+          
         return images;
     }
 }

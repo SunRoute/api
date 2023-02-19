@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('ImageSetting', {
+    const ImageSetting = sequelize.define('ImageSetting', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -101,7 +101,12 @@ module.exports = function(sequelize, DataTypes) {
                 fields: [
                     { name: "id" },
                 ]
-            },
+            }
         ]
     });
+    ImageSetting.associate = function(models) {
+        ImageSetting.hasMany(models.Image, { as: 'images', foreignKey: 'imageSettingId'});
+    };
+
+    return ImageSetting;
 };

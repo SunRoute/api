@@ -1,13 +1,13 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-    const ImageResize = sequelize.define('Image', {
+    const Image = sequelize.define('Image', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        imageSettingsId: {
+        imageSettingId: {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
@@ -174,17 +174,17 @@ module.exports = function(sequelize, DataTypes) {
                 ]
             },
             {
-                name: "imageSettingsId",
+                name: "imageSettingId",
                 using: "BTREE",
                 fields: [
-                    { name: "imageSettingsId" },
+                    { name: "imageSettingId" },
                 ]
-            },
+            }
         ]
     });
-    ImageResize.associate = function(models) {
-        ImageResize.belongsTo(models.ImageSetting, { foreignKey: 'imageSettingsId' });
+    Image.associate = function(models) {
+        Image.belongsTo(models.ImageSetting, { foreignKey: 'imageSettingsId' });
     };
 
-    return ImageResize;
+    return Image;
 };
